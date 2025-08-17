@@ -8,7 +8,8 @@
 :root {
     --primary-color: #1a1a1a;
     --secondary-color: #333;
-    --accent-color: #d4af37;
+    --accent-color: #196b4d;
+    --accent-color-light: #196b4d93;
     --text-light: #ffffff;
     --text-dark: #1a1a1a;
     --text-gray: #888;
@@ -17,6 +18,19 @@
     --border-color: #333;
     --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     --shadow-light: 0 5px 15px rgba(0, 0, 0, 0.1);
+
+    --accent-color-2: #196b4d;
+    --primary-color-2: #342B2E;
+    --secondary-color-2: #757A7D;
+    --accent-color-2: #C7DBD4;
+    --text-light-2: #BEC2C3;
+    --text-dark-2: #1a1a1a;
+    --text-gray-2: #7C8F88;
+    --bg-dark-2: #4A5551;
+    --bg-light-2: #BDC1C2;
+    --border-color-2: #333;
+    --shadow-2: 0 10px 30px rgba(52, 43, 46, 0.3);
+    --shadow-light-2: 0 5px 15px rgba(52, 43, 46, 0.1);
 }
 
 html {
@@ -202,7 +216,7 @@ body {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+    text-shadow: 0 0 30px var(--accent-color-light);
     animation: fadeInUp 1s ease-out;
 }
 
@@ -239,14 +253,14 @@ body {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--accent-color) 0%, #b8941f 100%);
-    color: var(--text-dark);
+    background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-color-light) 100%);
+    color: var(--text-light-2);
     box-shadow: var(--shadow);
 }
 
 .btn-primary:hover {
     transform: translateY(-3px);
-    box-shadow: 0 15px 40px rgba(212, 175, 55, 0.4);
+    box-shadow: 0 15px 40px var(--accent-color-light);
 }
 
 .btn-secondary {
