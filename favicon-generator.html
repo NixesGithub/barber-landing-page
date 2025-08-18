@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Favicons - Mateusz Barber</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #196b4d;
+            text-align: center;
+        }
+        .upload-area {
+            border: 2px dashed #196b4d;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin: 20px 0;
+            background: #f8f9fa;
+        }
+        .upload-area.dragover {
+            background: #e8f5e8;
+            border-color: #28a745;
+        }
+        input[type="file"] {
+            margin: 20px 0;
+        }
+        button {
+            background: #196b4d;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+        button:hover {
+            background: #145a3f;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .favicon-preview {
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: white;
+        }
+        .favicon-preview img {
+            border: 1px solid #eee;
+            margin-bottom: 10px;
+        }
+        .download-all {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .instructions {
+            background: #e8f5e8;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .instructions h3 {
+            color: #196b4d;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Generador de Favicons - Mateusz Barber</h1>
+        
+        <div class="instructions">
+            <h3>📋 Instrucciones:</h3>
+            <ol>
+                <li>Sube tu imagen del bigote (recomendado: PNG con fondo transparente, mínimo 512x512px)</li>
+                <li>Haz clic en "Generar Favicons"</li>
+                <li>Descarga todos los favicons generados</li>
+                <li>Coloca los archivos en la carpeta <code>assets/</code> de tu proyecto</li>
+            </ol>
+        </div>
+
+        <div class="upload-area" id="uploadArea">
+            <h3>📁 Arrastra tu imagen aquí o haz clic para seleccionar</h3>
+            <input type="file" id="imageInput" accept="image/*">
+            <p>Formatos soportados: PNG, JPG, JPEG, GIF</p>
+        </div>
+
+        <div style="text-align: center;">
+            <button id="generateBtn" disabled>Generar Favicons</button>
+            <button id="downloadAllBtn" disabled>Descargar Todos</button>
+        </div>
+
+        <div class="preview" id="previewArea"></div>
+
+        <div class="download-all" id="downloadArea"></div>
+    </div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const imageInput = document.getElementById('imageInput');
+        const generateBtn = document.getElementById('generateBtn');
+        const downloadAllBtn = document.getElementById('downloadAllBtn');
+        const previewArea = document.getElementById('previewArea');
+        const downloadArea = document.getElementById('downloadArea');
+
+        let selectedImage = null;
+        let generatedFavicons = [];
+
+        // Configuración de tamaños de favicon
+        const faviconSizes = [
+            { name: 'favicon-16x16.png', size: 16 },
+            { name: 'favicon-32x32.png', size: 32 },
+            { name: 'apple-touch-icon.png', size: 180 },
+            { name: 'android-chrome-192x192.png', size: 192 },
+            { name: 'android-chrome-512x512.png', size: 512 }
+        ];
+
+        // Drag and drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        });
+
+        uploadArea.addEventListener('click', () => {
+            imageInput.click();
+        });
+
+        imageInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        function handleFile(file) {
+            if (!file.type.startsWith('image/')) {
+                alert('Por favor selecciona una imagen válida');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                selectedImage = e.target.result;
+                generateBtn.disabled = false;
+                uploadArea.innerHTML = `
+                    <h3>✅ Imagen seleccionada</h3>
+                    <img src="${selectedImage}" style="max-width: 200px; max-height: 200px; border-radius: 5px;">
+                    <p><strong>${file.name}</strong></p>
+                `;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        generateBtn.addEventListener('click', generateFavicons);
+        downloadAllBtn.addEventListener('click', downloadAllFavicons);
+
+        function generateFavicons() {
+            if (!selectedImage) return;
+
+            generatedFavicons = [];
+            previewArea.innerHTML = '';
+            downloadArea.innerHTML = '';
+
+            faviconSizes.forEach(favicon => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+
+                img.onload = () => {
+                    canvas.width = favicon.size;
+                    canvas.height = favicon.size;
+
+                    // Crear fondo transparente
+                    ctx.clearRect(0, 0, favicon.size, favicon.size);
+
+                    // Calcular dimensiones para mantener proporción
+                    const scale = Math.min(favicon.size / img.width, favicon.size / img.height);
+                    const width = img.width * scale;
+                    const height = img.height * scale;
+                    const x = (favicon.size - width) / 2;
+                    const y = (favicon.size - height) / 2;
+
+                    // Dibujar imagen centrada
+                    ctx.drawImage(img, x, y, width, height);
+
+                    // Convertir a blob
+                    canvas.toBlob((blob) => {
+                        const faviconData = {
+                            name: favicon.name,
+                            size: favicon.size,
+                            blob: blob,
+                            url: canvas.toDataURL()
+                        };
+                        generatedFavicons.push(faviconData);
+                        displayFavicon(faviconData);
+                        
+                        if (generatedFavicons.length === faviconSizes.length) {
+                            downloadAllBtn.disabled = false;
+                        }
+                    }, 'image/png');
+                };
+
+                img.src = selectedImage;
+            });
+        }
+
+        function displayFavicon(faviconData) {
+            const preview = document.createElement('div');
+            preview.className = 'favicon-preview';
+            preview.innerHTML = `
+                <img src="${faviconData.url}" alt="${faviconData.name}" style="width: ${Math.min(faviconData.size, 100)}px; height: ${Math.min(faviconData.size, 100)}px;">
+                <p><strong>${faviconData.name}</strong></p>
+                <p>${faviconData.size}x${faviconData.size}px</p>
+                <button onclick="downloadFavicon('${faviconData.name}', '${faviconData.url}')">Descargar</button>
+            `;
+            previewArea.appendChild(preview);
+        }
+
+        function downloadFavicon(filename, dataUrl) {
+            const link = document.createElement('a');
+            link.href = dataUrl;
+            link.download = filename;
+            link.click();
+        }
+
+        function downloadAllFavicons() {
+            generatedFavicons.forEach(favicon => {
+                downloadFavicon(favicon.name, favicon.url);
+            });
+        }
+    </script>
+</body>
+</html>
