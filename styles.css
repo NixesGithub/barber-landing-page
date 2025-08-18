@@ -10,7 +10,7 @@
     --secondary-color: #333;
     --accent-color: #196b4d;
     --accent-color-light: #196b4d93;
-    --text-light: #ffffff;
+    --text-light: #BEC2C3;
     --text-dark: #1a1a1a;
     --text-gray: #888;
     --bg-dark: #0a0a0a;
@@ -32,9 +32,13 @@
     --shadow-2: 0 10px 30px rgba(52, 43, 46, 0.3);
     --shadow-light-2: 0 5px 15px rgba(52, 43, 46, 0.1);
 }
+video {
+    filter: blur(10px);
+}
 
 html {
     scroll-behavior: smooth;
+    user-select: none;
 }
 
 body {
@@ -110,7 +114,12 @@ body {
 
 .logo-icon {
     font-size: 2rem;
-    color: var(--accent-color);
+    img {
+        width: 7rem;
+        height: 5rem;
+        object-fit: cover;
+        /* outline: 2px solid white; */
+    }
 }
 
 .nav-menu {
@@ -254,7 +263,7 @@ body {
 
 .btn-primary {
     background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-color-light) 100%);
-    color: var(--text-light-2);
+    color: var(--text-light);
     box-shadow: var(--shadow);
 }
 

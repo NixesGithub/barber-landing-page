@@ -1,3 +1,19 @@
+// Vercel Speed Insights (versión CDN)
+(function() {
+    var script = document.createElement('script');
+    script.src = 'https://vitals.vercel-insights.com/v1/vitals.js';
+    script.onload = function() {
+        if (window.vitals) {
+            window.vitals.trackCLS();
+            window.vitals.trackFID();
+            window.vitals.trackFCP();
+            window.vitals.trackLCP();
+            window.vitals.trackTTFB();
+        }
+    };
+    document.head.appendChild(script);
+})();
+
 // Navegación móvil
 document.addEventListener('DOMContentLoaded', function() {
     const navToggle = document.querySelector('.nav-toggle');
