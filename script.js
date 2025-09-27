@@ -291,6 +291,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Carrusel de imágenes
+    initCarousel();
+
     // Botón de WhatsApp flotante
     const floatingWhatsApp = document.createElement('div');
     floatingWhatsApp.innerHTML = `
@@ -369,3 +372,143 @@ function requestTick() {
 }
 
 window.addEventListener('scroll', requestTick);
+
+// Función del carrusel
+function initCarousel() {
+    const carousel = document.querySelector('.carousel-container');
+    if (!carousel) return;
+
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const indicators = carousel.querySelectorAll('.indicator');
+    const prevBtn = carousel.querySelector('.carousel-btn.prev');
+    const nextBtn = carousel.querySelector('.carousel-btn.next');
+    
+    let currentSlide = 0;
+    let isTransitioning = false;
+    let autoPlayInterval;
+
+    // Función para mostrar slide específico
+    function showSlide(index) {
+        if (isTransitioning) return;
+        
+        isTransitioning = true;
+        
+        // Remover clase active de slide actual
+        slides[currentSlide].classList.remove('active');
+        indicators[currentSlide].classList.remove('active');
+        
+        // Actualizar índice
+        currentSlide = index;
+        if (currentSlide >= slides.length) currentSlide = 0;
+        if (currentSlide < 0) currentSlide = slides.length - 1;
+        
+        // Agregar clase active al nuevo slide
+        slides[currentSlide].classList.add('active');
+        indicators[currentSlide].classList.add('active');
+        
+        // Resetear transición después de un delay
+        setTimeout(() => {
+            isTransitioning = false;
+        }, 600);
+    }
+
+    // Función para siguiente slide
+    function nextSlide() {
+        showSlide(currentSlide + 1);
+    }
+
+    // Función para slide anterior
+    function prevSlide() {
+        showSlide(currentSlide - 1);
+    }
+
+    // Auto-play del carrusel
+    function startAutoPlay() {
+        autoPlayInterval = setInterval(nextSlide, 5000); // Cambiar cada 5 segundos
+    }
+
+    function stopAutoPlay() {
+        clearInterval(autoPlayInterval);
+    }
+
+    // Event listeners
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            stopAutoPlay();
+            nextSlide();
+            startAutoPlay();
+        });
+    }
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            stopAutoPlay();
+            prevSlide();
+            startAutoPlay();
+        });
+    }
+
+    // Indicadores
+    indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+            stopAutoPlay();
+            showSlide(index);
+            startAutoPlay();
+        });
+    });
+
+    // Pausar auto-play al hacer hover
+    carousel.addEventListener('mouseenter', stopAutoPlay);
+    carousel.addEventListener('mouseleave', startAutoPlay);
+
+    // Touch/swipe support para móviles
+    let startX = 0;
+    let endX = 0;
+
+    carousel.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        stopAutoPlay();
+    });
+
+    carousel.addEventListener('touchend', (e) => {
+        endX = e.changedTouches[0].clientX;
+        const diffX = startX - endX;
+        
+        if (Math.abs(diffX) > 50) { // Mínimo swipe de 50px
+            if (diffX > 0) {
+                nextSlide();
+            } else {
+                prevSlide();
+            }
+        }
+        
+        startAutoPlay();
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (carousel.matches(':hover') || carousel.matches(':focus-within')) {
+            if (e.key === 'ArrowLeft') {
+                stopAutoPlay();
+                prevSlide();
+                startAutoPlay();
+            } else if (e.key === 'ArrowRight') {
+                stopAutoPlay();
+                nextSlide();
+                startAutoPlay();
+            }
+        }
+    });
+
+    // Iniciar auto-play
+    startAutoPlay();
+
+    // Pausar cuando la página no está visible
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            stopAutoPlay();
+        } else {
+            startAutoPlay();
+        }
+    });
+}
