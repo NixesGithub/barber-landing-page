@@ -43,6 +43,7 @@ html {
     --border-color-2: #333;
     --shadow-2: 0 10px 30px rgba(52, 43, 46, 0.3);
     --shadow-light-2: 0 5px 15px rgba(52, 43, 46, 0.1);
+    --plateado: #525252cd;
 }
 video {
     filter: blur(10px);
@@ -357,7 +358,7 @@ body {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+    background: linear-gradient(90deg, transparent, var(--plateado), transparent);
     transition: left 0.5s ease;
 }
 
@@ -479,6 +480,58 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    h34 {
+        text-shadow: 
+        2px 2px 4px rgba(0, 0, 0, 0.8),    /* Sombra negra */
+        -1px -1px 0 rgba(0, 0, 0, 0.8),    /* Contorno */
+        1px -1px 0 rgba(0, 0, 0, 0.8),
+        -1px 1px 0 rgba(0, 0, 0, 0.8),
+        1px 1px 0 rgba(0, 0, 0, 0.8);
+        
+    }
+    h32{
+        background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    padding: 0.5rem 1rem;
+    /* border-radius: 8px; */
+    /* border: 1px solid rgba(255, 255, 255, 0.2); */
+    margin: 0 -5px;
+       -webkit-text-stroke: 0.2px #000;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    }
+    h3 {
+          background: radial-gradient(
+        ellipse at center,
+        rgba(0, 0, 0, 0.7) 0%,
+        rgba(0, 0, 0, 0.5) 30%,
+        rgba(0, 0, 0, 0.3) 60%,
+        transparent 100%
+    ); 
+    backdrop-filter: blur(10px);
+    width: auto;
+
+    margin: 0 -60px;
+       -webkit-text-stroke: 0.2px #989898;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    border-radius: 8px;
+    /* border: 1px solid rgba(255, 255, 255, 0.2); */
+    }
+
+    h6 {
+         background: linear-gradient(
+        135deg, 
+        rgba(0, 0, 0, 0.7) 0%, 
+        rgba(0, 0, 0, 0.5) 50%, 
+        rgba(0, 0, 0, 0.7) 100%
+    );
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    }
+   h38 {
+    -webkit-text-stroke: 0.2px #000;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    /* -webkit-text-fill-color: #fff; */
+}
 }
 
 .carousel-slide.active {
@@ -728,7 +781,7 @@ body {
 }
 
 .contact-method:hover {
-    background: rgba(212, 175, 55, 0.1);
+    background: var(--plateado);
     border-color: var(--accent-color);
     transform: translateX(10px);
 }
@@ -790,7 +843,7 @@ body {
 .form-group textarea:focus {
     outline: none;
     border-color: var(--accent-color);
-    background: rgba(212, 175, 55, 0.1);
+    background: var(--plateado);
 }
 
 .form-group input::placeholder,
