@@ -42,13 +42,33 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Header transparente al hacer scroll
+    // Header transparente y efecto del logo al hacer scroll
+    let lastScrollY = window.scrollY;
+    let isScrollingDown = false;
+    
     window.addEventListener('scroll', function() {
-        if (window.scrollY > 100) {
+        const currentScrollY = window.scrollY;
+        
+        // Determinar dirección del scroll
+        isScrollingDown = currentScrollY > lastScrollY;
+        
+        // Efecto del header
+        if (currentScrollY > 100) {
             header.style.background = 'rgba(10, 10, 10, 0.98)';
         } else {
             header.style.background = 'rgba(10, 10, 10, 0.95)';
         }
+        
+        // Efecto del logo
+        if (currentScrollY > 50 && isScrollingDown) {
+            // Scroll hacia abajo: logo sube y se alinea con el header
+            header.classList.add('scrolled');
+        } else if (currentScrollY <= 50) {
+            // Scroll hacia arriba desde la parte superior: logo vuelve a su posición original
+            header.classList.remove('scrolled');
+        }
+        
+        lastScrollY = currentScrollY;
     });
 
     // Smooth scroll para enlaces internos

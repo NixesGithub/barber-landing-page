@@ -131,10 +131,12 @@ body {
     font-size: 2rem;
     margin-right: 1rem;
     height: 64px;
+    transition: all 0.3s ease;
     img {
         width: 14rem;
         height: 10rem;
         object-fit: cover;
+        transition: all 0.3s ease;
         /* outline: 2px solid white; */
          filter:
         drop-shadow(1px 0 0 white)
@@ -145,6 +147,15 @@ body {
         drop-shadow(-1px -1px 0 white)
         drop-shadow(1px -1px 0 white)
         drop-shadow(-1px 1px 0 white);
+    }
+}
+
+/* Estado cuando se hace scroll hacia abajo */
+.header.scrolled .logo-icon {
+    transform: translateY(-20px);
+    img {
+        width: 8rem;
+        height: 6rem;
     }
 }
 
@@ -361,7 +372,7 @@ body {
 
 /* Services Section */
 .services {
-    padding: 6rem 0;
+    padding: 0 0 6rem 0;
     background: var(--bg-dark);
 }
 
@@ -1078,6 +1089,15 @@ body {
         order: 1;
     }
     
+    /* Efecto del logo en tablets */
+    .header.scrolled .logo-icon {
+        transform: translateY(-18px);
+        img {
+            width: 6rem;
+            height: 4.5rem;
+        }
+    }
+    
     .contact-content-centered {
         min-height: 300px;
     }
@@ -1202,6 +1222,15 @@ body {
     .logo-icon img {
         width: 5rem;
         height: 3.5rem;
+    }
+    
+    /* Efecto del logo en móviles */
+    .header.scrolled .logo-icon {
+        transform: translateY(-15px);
+        img {
+            width: 4rem;
+            height: 3rem;
+        }
     }
     
     .hero {
