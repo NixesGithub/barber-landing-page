@@ -46,6 +46,11 @@ document.addEventListener('DOMContentLoaded', function() {
     let lastScrollY = window.scrollY;
     let isScrollingDown = false;
     
+    // Función para detectar si es móvil
+    function isMobile() {
+        return window.innerWidth <= 768;
+    }
+    
     window.addEventListener('scroll', function() {
         const currentScrollY = window.scrollY;
         
@@ -59,16 +64,28 @@ document.addEventListener('DOMContentLoaded', function() {
             header.style.background = 'rgba(10, 10, 10, 0.95)';
         }
         
-        // Efecto del logo
-        if (currentScrollY > 50 && isScrollingDown) {
-            // Scroll hacia abajo: logo sube y se alinea con el header
-            header.classList.add('scrolled');
-        } else if (currentScrollY <= 50) {
-            // Scroll hacia arriba desde la parte superior: logo vuelve a su posición original
-            header.classList.remove('scrolled');
+        // Efecto del logo solo en desktop y tablet (no en móvil)
+        if (!isMobile()) {
+            if (currentScrollY > 50 && isScrollingDown) {
+                // Scroll hacia abajo: logo sube y se alinea con el header
+                header.classList.add('scrolled');
+            } else if (currentScrollY <= 50) {
+                // Scroll hacia arriba desde la parte superior: logo vuelve a su posición original
+                header.classList.remove('scrolled');
+            }
         }
         
         lastScrollY = currentScrollY;
+    });
+    
+    // Manejar cambio de tamaño de ventana
+    window.addEventListener('resize', function() {
+        // Si cambia a móvil, remover la clase scrolled
+        if (isMobile()) {
+            header.classList.remove('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
     });
 
     // Smooth scroll para enlaces internos

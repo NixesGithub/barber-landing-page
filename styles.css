@@ -1224,7 +1224,27 @@ body {
         height: 3.5rem;
     }
     
-    /* Efecto del logo en móviles */
+    .logo-icon {
+        transform: translateY(-10px);
+        img {
+                width: 7rem;
+                height: 5rem;
+            }
+    }
+    /* Logo fijo en móviles - sin efecto de movimiento */
+    .footer-content {
+        .logo-icon-footer {
+            transform: translateX(65px);
+          
+        }
+        span {
+            transform: translateX(55px);
+        }
+    }
+
+
+    
+    /* Desactivar efecto de scroll en móviles */
     .header.scrolled .logo-icon {
         transform: translateY(-15px);
         img {
