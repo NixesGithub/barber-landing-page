@@ -24,6 +24,13 @@ document.addEventListener('DOMContentLoaded', function() {
     navToggle.addEventListener('click', function() {
         navMenu.classList.toggle('active');
         navToggle.classList.toggle('active');
+        
+        // Prevenir scroll del body cuando el menú está abierto
+        if (navMenu.classList.contains('active')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
     });
 
     // Cerrar menú al hacer click en un enlace
@@ -31,15 +38,53 @@ document.addEventListener('DOMContentLoaded', function() {
         link.addEventListener('click', () => {
             navMenu.classList.remove('active');
             navToggle.classList.remove('active');
+            document.body.style.overflow = '';
         });
     });
 
-    // Header transparente al hacer scroll
+    // Header transparente y efecto del logo al hacer scroll
+    let lastScrollY = window.scrollY;
+    let isScrollingDown = false;
+    
+    // Función para detectar si es móvil
+    function isMobile() {
+        return window.innerWidth <= 768;
+    }
+    
     window.addEventListener('scroll', function() {
-        if (window.scrollY > 100) {
+        const currentScrollY = window.scrollY;
+        
+        // Determinar dirección del scroll
+        isScrollingDown = currentScrollY > lastScrollY;
+        
+        // Efecto del header
+        if (currentScrollY > 100) {
             header.style.background = 'rgba(10, 10, 10, 0.98)';
         } else {
             header.style.background = 'rgba(10, 10, 10, 0.95)';
+        }
+        
+        // Efecto del logo solo en desktop y tablet (no en móvil)
+        if (!isMobile()) {
+            if (currentScrollY > 50 && isScrollingDown) {
+                // Scroll hacia abajo: logo sube y se alinea con el header
+                header.classList.add('scrolled');
+            } else if (currentScrollY <= 50) {
+                // Scroll hacia arriba desde la parte superior: logo vuelve a su posición original
+                header.classList.remove('scrolled');
+            }
+        }
+        
+        lastScrollY = currentScrollY;
+    });
+    
+    // Manejar cambio de tamaño de ventana
+    window.addEventListener('resize', function() {
+        // Si cambia a móvil, remover la clase scrolled
+        if (isMobile()) {
+            header.classList.remove('scrolled');
+        } else {
+            header.classList.remove('scrolled');
         }
     });
 
@@ -283,6 +328,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Carrusel de imágenes
+    initCarousel();
+
     // Botón de WhatsApp flotante
     const floatingWhatsApp = document.createElement('div');
     floatingWhatsApp.innerHTML = `
@@ -361,3 +409,143 @@ function requestTick() {
 }
 
 window.addEventListener('scroll', requestTick);
+
+// Función del carrusel
+function initCarousel() {
+    const carousel = document.querySelector('.carousel-container');
+    if (!carousel) return;
+
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const indicators = carousel.querySelectorAll('.indicator');
+    const prevBtn = carousel.querySelector('.carousel-btn.prev');
+    const nextBtn = carousel.querySelector('.carousel-btn.next');
+    
+    let currentSlide = 0;
+    let isTransitioning = false;
+    let autoPlayInterval;
+
+    // Función para mostrar slide específico
+    function showSlide(index) {
+        if (isTransitioning) return;
+        
+        isTransitioning = true;
+        
+        // Remover clase active de slide actual
+        slides[currentSlide].classList.remove('active');
+        indicators[currentSlide].classList.remove('active');
+        
+        // Actualizar índice
+        currentSlide = index;
+        if (currentSlide >= slides.length) currentSlide = 0;
+        if (currentSlide < 0) currentSlide = slides.length - 1;
+        
+        // Agregar clase active al nuevo slide
+        slides[currentSlide].classList.add('active');
+        indicators[currentSlide].classList.add('active');
+        
+        // Resetear transición después de un delay
+        setTimeout(() => {
+            isTransitioning = false;
+        }, 600);
+    }
+
+    // Función para siguiente slide
+    function nextSlide() {
+        showSlide(currentSlide + 1);
+    }
+
+    // Función para slide anterior
+    function prevSlide() {
+        showSlide(currentSlide - 1);
+    }
+
+    // Auto-play del carrusel
+    function startAutoPlay() {
+        autoPlayInterval = setInterval(nextSlide, 5000); // Cambiar cada 5 segundos
+    }
+
+    function stopAutoPlay() {
+        clearInterval(autoPlayInterval);
+    }
+
+    // Event listeners
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            stopAutoPlay();
+            nextSlide();
+            startAutoPlay();
+        });
+    }
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            stopAutoPlay();
+            prevSlide();
+            startAutoPlay();
+        });
+    }
+
+    // Indicadores
+    indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+            stopAutoPlay();
+            showSlide(index);
+            startAutoPlay();
+        });
+    });
+
+    // Pausar auto-play al hacer hover
+    carousel.addEventListener('mouseenter', stopAutoPlay);
+    carousel.addEventListener('mouseleave', startAutoPlay);
+
+    // Touch/swipe support para móviles
+    let startX = 0;
+    let endX = 0;
+
+    carousel.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        stopAutoPlay();
+    });
+
+    carousel.addEventListener('touchend', (e) => {
+        endX = e.changedTouches[0].clientX;
+        const diffX = startX - endX;
+        
+        if (Math.abs(diffX) > 50) { // Mínimo swipe de 50px
+            if (diffX > 0) {
+                nextSlide();
+            } else {
+                prevSlide();
+            }
+        }
+        
+        startAutoPlay();
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (carousel.matches(':hover') || carousel.matches(':focus-within')) {
+            if (e.key === 'ArrowLeft') {
+                stopAutoPlay();
+                prevSlide();
+                startAutoPlay();
+            } else if (e.key === 'ArrowRight') {
+                stopAutoPlay();
+                nextSlide();
+                startAutoPlay();
+            }
+        }
+    });
+
+    // Iniciar auto-play
+    startAutoPlay();
+
+    // Pausar cuando la página no está visible
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            stopAutoPlay();
+        } else {
+            startAutoPlay();
+        }
+    });
+}

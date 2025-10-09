@@ -178,7 +178,7 @@ const MAP_CONFIG = {
         icon: {
             url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`
                 <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="20" cy="20" r="20" fill="#d4af37"/>
+                    <circle cx="20" cy="20" r="20" fill="#d1d1d1d6"/>
                     <path d="M12 15h16v2H12zm0 4h16v2H12zm0 4h16v2H12z" fill="#1a1a1a"/>
                     <circle cx="20" cy="20" r="8" fill="none" stroke="#1a1a1a" stroke-width="2"/>
                 </svg>
@@ -192,7 +192,7 @@ const MAP_CONFIG = {
     infoWindow: {
         content: `
             <div style="padding: 10px; max-width: 200px;">
-                <h3 style="margin: 0 0 10px 0; color: #d4af37; font-family: 'Playfair Display', serif;">
+                <h3 style="margin: 0 0 10px 0; color: #d1d1d1d6; font-family: 'Playfair Display', serif;">
                     Mateusz Barber
                 </h3>
                 <p style="margin: 0 0 5px 0; color: #333;">
