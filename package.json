@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "dev": "npx serve .",
-    "build": "echo 'Build completado'",
+    "build": "npm build --output public; echo 'Build completado'",
     "start": "npx serve ."
   },
   "keywords": [
