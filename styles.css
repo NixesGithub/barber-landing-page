@@ -721,21 +721,6 @@ body {
     box-shadow: var(--shadow);
 }
 
-.map-pin {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: var(--accent-color);
-    color: var(--text-dark);
-    padding: 0.5rem 1rem;
-    border-radius: 25px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    box-shadow: var(--shadow-light);
-}
-
 /* Contact Section */
 .contact {
     padding: 6rem 0;
@@ -1500,13 +1485,6 @@ body {
 @media (max-width: 768px) {
     .map-container {
         height: 250px;
-    }
-    
-    .map-pin {
-        top: 10px;
-        right: 10px;
-        padding: 0.3rem 0.8rem;
-        font-size: 0.8rem;
     }
 }
 
