@@ -1,0 +1,22 @@
+{
+  "name": "mateusz-barber-landing",
+  "version": "1.0.0",
+  "description": "Landing page para Mateusz Barber - Peluquería masculina en Valencia",
+  "main": "index.html",
+  "scripts": {
+    "build": "echo 'No build step required for static site'",
+    "start": "serve -s .",
+    "dev": "serve -s ."
+  },
+  "keywords": [
+    "barber",
+    "peluqueria",
+    "valencia",
+    "landing-page"
+  ],
+  "author": "Mateusz Barber",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.1"
+  }
+}
